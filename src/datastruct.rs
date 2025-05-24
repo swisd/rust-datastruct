@@ -13,12 +13,44 @@ type BYTE = u8;
 type WORD = u16;
 type DWORD = u32;
 type QWORD = u64;
+type DOUBLE = f64;
+type FLOAT = f32;
+type BOOL = bool;
+type CHAR = char;
+type SHORT = i16;
+type INT = i32;
+type LONG = i64;
+type UCHAR = u8;
+type USHORT = u16;
+type UINT = u32;
+type ULONG = u64;
+type SCHAR = i8;
+type ProgramCall = u8;
+type Addr8 = u8;
+type Addr16 = u16;
+type Addr32 = u32;
+type Addr64 = u64;
+
+trait Peripheral
+{
+    fn doIO(&mut self, addr: Addr64, val: u16) -> u16;
+    fn doHighIO(&mut self, addr: Addr64, val: u16) -> u16;
+}
+
+struct RIG {
+    mem: [Addr64; 0xF000000000000000],
+    debugflags: INT,
+    slots: [Option<Box<dyn Peripheral>>; 16],
+    nreads: u16 // counts # of reads for noise() fn
+}
+
+
 
 // GL stuff
 
 type PtrDiff_t = i32;
 type Enum = DWORD;
-type Boolean = u8;
+type Boolean = UCHAR;
 
 
 static COLOR_BUFFER_BIT: Enum = 0x00004000;
@@ -179,7 +211,7 @@ type Vect = Vec<u8>;
 
 
 
-
+// structures
 
 struct Point {
     x: f64,
@@ -273,6 +305,16 @@ pub(crate) struct Error {
 struct Object {
     name: String,
     data: String,
+    loc: Addr16,
+    size: Size,
+    type_: Enum,
+    parent: Option<Box<Object>>,
+    children: Vec<Box<Object>>,
+    next: Option<Box<Object>>,
+    prev: Option<Box<Object>>,
+    first: Option<Box<Object>>,
+    last: Option<Box<Object>>,
+    flags: Enum,
 }
 
 struct Param {
@@ -346,19 +388,19 @@ impl Rect {
 impl Pair {
     // This method "consumes" the resources of the caller object
     // `self` desugars to `self: Self`
-    
+
     fn new(first: i32, second: i32) -> Pair {
         Pair(Box::new(first), Box::new(second))
     }
-    
+
     fn sum(&self) -> i32 {
         *self.0 + *self.1
     }
-    
+
     fn product(&self) -> i32 {
         *self.0 * *self.1
     }
-        
+
     fn destroy(self) {
         // Destructure `self`
         let Pair(first, second) = self;
@@ -510,6 +552,26 @@ impl Error {
     }
 }
 
-fn main(){
-    Error::print(&Error::new(255, "Unspecified Error".parse().unwrap()))
+impl Object {
+    fn new(name: String, data: String, loc: Addr16, size: Size, type_: Enum, parent: Option<Box<Object>>, children: Vec<Box<Object>>, next: Option<Box<Object>>, prev: Option<Box<Object>>, first: Option<Box<Object>>, last: Option<Box<Object>>, flags: Enum) -> Object {
+        Object { name: name, data: data, loc: loc, size: size, type_: type_, parent: parent, children: children, next: next, prev: prev, first: first, last: last, flags: flags }
+    }
+    fn repr(&self) {
+        println!("<Object {} at {}", self.name, self.loc);
+    }
 }
+
+impl Param {
+    fn new(name: String, data: Object) -> Param {
+        Param { name: name, data: data }
+    }
+}
+
+impl Scene {
+    fn new(name: String, params: Vec<Param>) -> Scene {
+        Scene { name: name, params: params }
+    }
+}
+
+// Extra classes and stuff
+
