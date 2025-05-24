@@ -1,4 +1,4 @@
-mod datastruct;
+pub mod datastruct;
 
 fn main() {
     println!("Hello, world!");

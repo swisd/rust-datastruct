@@ -1,13 +1,35 @@
 // datastruct
 
+use std::process::ExitCode;
+
 const CLK: u32 = 1000000;
-const PI: f64 = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679;
-const E: f64 = 2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274;
+const PI: f64 = std::f64::consts::PI;
+const E: f64 = std::f64::consts::E;
 const TAU: f64 = 6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359;
 const NAN: f64 = 0.0 / 0.0;
 const INF: f64 = 1.0 / 0.0;
+const NULL: u8 = 0x00;
+const TRUE: bool = true;
+const FALSE: bool = false;
 
 const BYTES: usize = 64;
+
+const ELLIPSIS: &str = "...";
+const EMPTY: &str = "";
+const SPACE: &str = " ";
+const TAB: &str = "\t";
+const NEWLINE: &str = "\n";
+const CR: &str = "\r";
+const LF: &str = "\n";
+const CRLF: &str = "\r\n";
+const NULL_CHAR: &str = "\0";
+const NULL_BYTE: &str = "\0";
+const NULL_WORD: &str = "\0\0";
+const NULL_DWORD: &str = "\0\0\0\0";
+const NULL_QWORD: &str = "\0\0\0\0\0\0\0\0";
+const NULL_FLOAT: &str = "\0\0\0\0";
+const NULL_DOUBLE: &str = "\0\0\0\0\0\0\0\0";
+const NULL_BOOL: &str = "\0";
 
 type BYTE = u8;
 type WORD = u16;
@@ -30,6 +52,160 @@ type Addr8 = u8;
 type Addr16 = u16;
 type Addr32 = u32;
 type Addr64 = u64;
+type NIBBLE = u8;
+type BYTEARRAY = [u8; 16];
+type WORDARRAY = [u16; 8];
+type DWORDARRAY = [u32; 4];
+type QWORDARRAY = [u64; 2];
+type FLOATARRAY = [f32; 4];
+type DOUBLEARRAY = [f64; 2];
+type BOOLARRAY = [bool; 8];
+type CHARARRAY = [char; 16];
+type SHORTARRAY = [i16; 8];
+type INTARRAY = [i32; 4];
+type LONGARRAY = [i64; 2];
+type UCHARARRAY = [u8; 16];
+type USHORTARRAY = [u16; 8];
+type UINTARRAY = [u32; 4];
+type ULONGARRAY = [u64; 2];
+type SCHARARRAY = [i8; 16];
+type BYTEARRAY2 = [u8; 32];
+type WORDARRAY2 = [u16; 16];
+type DWORDARRAY2 = [u32; 8];
+type QWORDARRAY2 = [u64; 4];
+type FLOATARRAY2 = [f32; 8];
+type DOUBLEARRAY2 = [f64; 4];
+type BOOLARRAY2 = [bool; 16];
+type CHARARRAY2 = [char; 32];
+type SHORTARRAY2 = [i16; 16];
+type INTARRAY2 = [i32; 8];
+type LONGARRAY2 = [i64; 4];
+type INT2 = [i32; 2];
+type INT4 = [i32; 4];
+type INT8 = [i32; 8];
+type INT16 = [i32; 16];
+type INT32 = [i32; 32];
+type INT64 = [i32; 64];
+type INT128 = [i32; 128];
+type UINT2 = [u32; 2];
+type UINT4 = [u32; 4];
+type UINT8 = [u32; 8];
+type UINT16 = [u32; 16];
+type UINT32 = [u32; 32];
+type UINT64 = [u32; 64];
+type UINT128 = [u32; 128];
+type FLOAT2 = [f32; 2];
+type FLOAT4 = [f32; 4];
+type FLOAT8 = [f32; 8];
+type FLOAT16 = [f32; 16];
+type FLOAT32 = [f32; 32];
+type FLOAT64 = [f32; 64];
+type FLOAT128 = [f32; 128];
+type DOUBLE2 = [f64; 2];
+type DOUBLE4 = [f64; 4];
+type DOUBLE8 = [f64; 8];
+type DOUBLE16 = [f64; 16];
+type DOUBLE32 = [f64; 32];
+type DOUBLE64 = [f64; 64];
+type DOUBLE128 = [f64; 128];
+type BOOL2 = [bool; 2];
+type BOOL4 = [bool; 4];
+type BOOL8 = [bool; 8];
+type BOOL16 = [bool; 16];
+type BOOL32 = [bool; 32];
+type BOOL64 = [bool; 64];
+type BOOL128 = [bool; 128];
+type CHAR2 = [char; 2];
+type CHAR4 = [char; 4];
+type CHAR8 = [char; 8];
+type CHAR16 = [char; 16];
+type CHAR32 = [char; 32];
+type SHORT2 = [i16; 2];
+type SHORT4 = [i16; 4];
+type SHORT8 = [i16; 8];
+type SHORT16 = [i16; 16];
+type INT2ARRAY2 = [i32; 4];
+type INT4ARRAY2 = [i32; 8];
+type INT8ARRAY2 = [i32; 16];
+type INT16ARRAY2 = [i32; 32];
+type INT32ARRAY2 = [i32; 64];
+type INT64ARRAY2 = [i32; 128];
+type INT128ARRAY2 = [i32; 256];
+type UINT2ARRAY2 = [u32; 4];
+type UINT4ARRAY2 = [u32; 8];
+type UINT8ARRAY2 = [u32; 16];
+type UINT16ARRAY2 = [u32; 32];
+type UINT32ARRAY2 = [u32; 64];
+type UINT64ARRAY2 = [u32; 128];
+type UINT128ARRAY2 = [u32; 256];
+type FLOAT2ARRAY2 = [f32; 4];
+type FLOAT4ARRAY2 = [f32; 8];
+type FLOAT8ARRAY2 = [f32; 16];
+type FLOAT16ARRAY2 = [f32; 32];
+type FLOAT32ARRAY2 = [f32; 64];
+type FLOAT64ARRAY2 = [f32; 128];
+type FLOAT128ARRAY2 = [f32; 256];
+type DOUBLE2ARRAY2 = [f64; 4];
+type DOUBLE4ARRAY2 = [f64; 8];
+type DOUBLE8ARRAY2 = [f64; 16];
+type DOUBLE16ARRAY2 = [f64; 32];
+type DOUBLE32ARRAY2 = [f64; 64];
+type DOUBLE64ARRAY2 = [f64; 128];
+type DOUBLE128ARRAY2 = [f64; 256];
+type BOOL2ARRAY2 = [bool; 4];
+type BOOL4ARRAY2 = [bool; 8];
+type BOOL8ARRAY2 = [bool; 16];
+type BOOL16ARRAY2 = [bool; 32];
+type BOOL32ARRAY2 = [bool; 64];
+type BOOL64ARRAY2 = [bool; 128];
+type BOOL128ARRAY2 = [bool; 256];
+type CHAR2ARRAY2 = [char; 4];
+type CHAR4ARRAY2 = [char; 8];
+type CHAR8ARRAY2 = [char; 16];
+type CHAR16ARRAY2 = [char; 32];
+type SHORT2ARRAY2 = [i16; 4];
+type SHORT4ARRAY2 = [i16; 8];
+type SHORT8ARRAY2 = [i16; 16];
+type SHORT16ARRAY2 = [i16; 32];
+
+
+// Time
+
+static TID: u32 = 0;
+static TID_MAX: u32 = 0xFFFFFFFF;
+static TID_MIN: u32 = 0;
+static ABSTIME: u64 = 0;
+static RELTIME: u64 = 0;
+static TIME: u64 = 0;
+static TINTERVAL: u64 = 0;
+
+// Network
+
+type IPV4 = u32;
+type IPV6 = u64;
+type PORT = u16;
+type IPADDR = String;
+type MACADDR = String;
+
+static IPV4_: IPV4 = 0;
+static IPV6_: IPV6 = 0;
+static IPV4_MAX: IPV4 = 0xFFFFFFFF;
+static IPV6_MAX: IPV6 = 0xFFFFFFFFFFFFFFFF;
+static IPV4_MIN: IPV4 = 0;
+static IPV6_MIN: IPV6 = 0;
+static PORT_: PORT = 0;
+static PORT_MAX: PORT = 0xFFFF;
+
+static HOST: String = String::new();
+static IPADDR: String = String::new();
+static MACADDR: String = String::new();
+
+static LOCALHOST: String = String::new();
+static LOCALHOST_IPV4: IPV4 = 0x7F000001; // should be 127.0.0.1
+static LOCALHOST_IPV6: IPV6 = 1; // should be ::1: or 0:0:0:0:0:0:0:1
+static LOCALHOST_PORT: PORT = 80; // default is 80
+
+// PC
 
 trait Peripheral
 {
@@ -41,8 +217,12 @@ struct RIG {
     mem: [Addr64; 0xF000000000000000],
     debugflags: INT,
     slots: [Option<Box<dyn Peripheral>>; 16],
-    nreads: u16 // counts # of reads for noise() fn
+    nreads: u16, // counts # of reads for noise() fn
 }
+
+// Bytecode
+
+type Interrrupt = u16;
 
 
 
@@ -194,7 +374,6 @@ fn defs() {
 }
 
 
-
 // Types
 
 type Pointer = *mut u8;
@@ -207,8 +386,6 @@ type Int = i64;
 type UInt = u64;
 type Str = String;
 type Vect = Vec<u8>;
-
-
 
 
 // structures
@@ -302,6 +479,11 @@ pub(crate) struct Error {
     message: String,
 }
 
+pub (crate) struct Warning {
+    code: i32,
+    message: String,
+}
+
 struct Object {
     name: String,
     data: String,
@@ -327,11 +509,9 @@ struct Scene {
     params: Vec<Param>,
 }
 
-
-
-
-
-
+struct Polygon {
+    points: Vec<(f64, f64)>,
+}
 
 
 // Implementation block
@@ -410,7 +590,6 @@ impl Pair {
         // `first` and `second` go out of scope and get freed
     }
 }
-
 
 
 impl Uniform {
@@ -543,6 +722,8 @@ impl Frame {
     }
 }
 
+
+// Errors
 impl Error {
     pub(crate) fn new(code: i32, message: String) -> Error {
         Error { code: code, message: message }
@@ -550,7 +731,93 @@ impl Error {
     pub(crate) fn print(&self) {
         println!("Error: {} :: {}", self.code, self.message);
     }
+    pub fn error(&self) {
+        println!("Error: {} :: {}", self.code, self.message);
+    }
 }
+
+// Error types
+type Exception = Error;
+type ArithmeticError = Error;
+type AssertionError = Error;
+type AttributeError = Error;
+type WindowsError = Error;
+type OSError = Error;
+type IOError = Error;
+type EnvironmentError = Error;
+type BlockingIOError = Error;
+type ConnectionError = Error;
+type BrokenPipeError = Error;
+type BufferError = Error;
+type ChildProcessError = Error;
+type ConnectionAbortedError = Error;
+type ConnectionRefusedError = Error;
+type ConnectionResetError = Error;
+type EOFError = Error;
+type FileExistsError = Error;
+type FileNotFoundError = Error;
+type FloatingPointError = ArithmeticError;
+type SyntaxError = Error;
+type LookupError = Error;
+type IndexError = LookupError;
+type InterruptedError = OSError;
+type IsADirectoryError = OSError;
+type KeyError = LookupError;
+type MemoryError = Error;
+type NameError = Error;
+type NotADirectoryError = OSError;
+type RuntimeError = Error;
+type NotImplementedError = RuntimeError;
+type OverflowError = ArithmeticError;
+type PermissionError = OSError;
+type ProcessLookupError = OSError;
+type RecursionError = Error;
+type ReferenceError = Error;
+type SystemError = Error;
+type TabError = SyntaxError;
+type TimeoutError = OSError;
+type TypeError = Error;
+type UnboundLocalError = NameError;
+type ValueError = Error;
+type UnicodeError = ValueError;
+type UnicodeDecodeError = UnicodeError;
+type UnicodeEncodeError = UnicodeError;
+type UnicodeTranslateError = UnicodeError;
+type ZeroDivisionError = ArithmeticError;
+
+
+
+type KeyboardInterrupt = Interrrupt;
+
+
+// Warning
+
+impl Warning {
+    fn new(code: i32, message: String) -> Warning {
+        Warning { code: code, message: message }
+    }
+    fn print(&self) {
+        println!("Warning: {} :: {}", self.code, self.message);
+    }
+    fn warning(&self) {
+        println!("Warning: {} :: {}", self.code, self.message);
+    }
+}
+
+type Warning_ = Warning;
+type BytesWarning = Warning;
+type DeprecationWarning = Warning;
+type EncodingWarning = Warning;
+type FutureWarning = Warning;
+type ResourceWarning = Warning;
+type RuntimeWarning = Warning;
+type SyntaxWarning = Warning;
+type UnicodeWarning = Warning;
+type UserWarning = Warning;
+
+
+
+// More stuff
 
 impl Object {
     fn new(name: String, data: String, loc: Addr16, size: Size, type_: Enum, parent: Option<Box<Object>>, children: Vec<Box<Object>>, next: Option<Box<Object>>, prev: Option<Box<Object>>, first: Option<Box<Object>>, last: Option<Box<Object>>, flags: Enum) -> Object {
@@ -570,6 +837,24 @@ impl Param {
 impl Scene {
     fn new(name: String, params: Vec<Param>) -> Scene {
         Scene { name: name, params: params }
+    }
+}
+
+impl Polygon {
+    fn new(points: Vec<(f64, f64)>) -> Polygon {
+        Polygon { points: points }
+    }
+
+    fn num_points(&self) -> usize {
+        self.points.len()
+    }
+
+    fn add_point(&mut self, point: (f64, f64)) {
+        self.points.push(point);
+    }
+
+    fn remove_point(&mut self, index: usize) {
+        self.points.remove(index);
     }
 }
 
