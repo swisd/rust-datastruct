@@ -7,6 +7,61 @@ const TAU: f64 = 6.2831853071795864769252867665590057683943387987502116419498891
 const NAN: f64 = 0.0 / 0.0;
 const INF: f64 = 1.0 / 0.0;
 
+const BYTES: usize = 64;
+
+type BYTE = u8;
+type WORD = u16;
+type DWORD = u32;
+type QWORD = u64;
+
+// GL stuff
+
+type PtrDiff_t = i32;
+type Enum = DWORD;
+type Boolean = u8;
+
+
+static COLOR_BUFFER_BIT: Enum = 0x00004000;
+static DEPTH_BUFFER_BIT: Enum = 0x00000100;
+static STENCIL_BUFFER_BIT: Enum = 0x00000400;
+static COLOR_BUFFER_BIT_MASK: Enum = 0x00004000;
+static DEPTH_BUFFER_BIT_MASK: Enum = 0x00000100;
+static STENCIL_BUFFER_BIT_MASK: Enum = 0x00000400;
+static COLOR_CLEAR_VALUE: Enum = 0x00000000;
+static DEPTH_CLEAR_VALUE: f64 = 1.0;
+static STENCIL_CLEAR_VALUE: Enum = 0;
+static COLOR_WRITE_MASK: Enum = 0x0000000F;
+static POINTS: Enum = 0x0000;
+static LINES: Enum = 0x0001;
+static LINE_LOOP: Enum = 0x0002;
+static LINE_STRIP: Enum = 0x0003;
+static TRIANGLES: Enum = 0x0004;
+static TRIANGLE_STRIP: Enum = 0x0005;
+static TRIANGLE_FAN: Enum = 0x0006;
+static NEVER: Enum = 0x0200;
+static LESS: Enum = 0x0201;
+static EQUAL: Enum = 0x0202;
+static LEQUAL: Enum = 0x0203;
+static GREATER: Enum = 0x0204;
+static NOTEQUAL: Enum = 0x0205;
+static GEQUAL: Enum = 0x0206;
+static ALWAYS: Enum = 0x0207;
+static SRC_ALPHA: Enum = 0x0302;
+static QUADS: Enum = 0x0007;
+static QUAD_STRIP: Enum = 0x0008;
+static POLYGON: Enum = 0x0009;
+static FRONT: Enum = 0x0404;
+static BACK: Enum = 0x0405;
+static FRONT_AND_BACK: Enum = 0x0408;
+static CULL_FACE: Enum = 0x0B44;
+static BLEND: Enum = 0x0BE2;
+static DITHER: Enum = 0x0BD0;
+static STENCIL_TEST: Enum = 0x0B90;
+static DEPTH_TEST: Enum = 0x0B71;
+static ZERO: f64 = 0.0;
+static ONE: f64 = 1.0;
+static SRC_COLOR: Enum = 0x0300;
+static BMP: Enum = 0x1A00;
 
 // Zero all int and float types
 
@@ -108,7 +163,18 @@ fn defs() {
 
 
 
+// Types
 
+type Pointer = *mut u8;
+type Size = usize;
+type Index = isize;
+type Char = char;
+type Bool = bool;
+type Float = f64;
+type Int = i64;
+type UInt = u64;
+type Str = String;
+type Vect = Vec<u8>;
 
 
 
@@ -204,6 +270,20 @@ pub(crate) struct Error {
     message: String,
 }
 
+struct Object {
+    name: String,
+    data: String,
+}
+
+struct Param {
+    name: String,
+    data: Object,
+}
+
+struct Scene {
+    name: String,
+    params: Vec<Param>,
+}
 
 
 
