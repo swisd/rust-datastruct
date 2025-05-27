@@ -1,6 +1,7 @@
 // datastruct
 
-use std::process::ExitCode;
+use std::collections::HashSet;
+use std::ptr::addr_of_mut;
 
 const CLK: u32 = 1000000;
 const PI: f64 = std::f64::consts::PI;
@@ -31,6 +32,9 @@ const NULL_FLOAT: &str = "\0\0\0\0";
 const NULL_DOUBLE: &str = "\0\0\0\0\0\0\0\0";
 const NULL_BOOL: &str = "\0";
 
+
+// Types
+
 type BYTE = u8;
 type WORD = u16;
 type DWORD = u32;
@@ -48,10 +52,67 @@ type UINT = u32;
 type ULONG = u64;
 type SCHAR = i8;
 type ProgramCall = u8;
-type Addr8 = u8;
-type Addr16 = u16;
-type Addr32 = u32;
-type Addr64 = u64;
+type ADDR8 = u8;
+type ADDR16 = u16;
+type ADDR32 = u32;
+type ADDR64 = u64;
+type POINTER = *mut u8;
+type SIZE = usize;
+type INDEX = isize;
+type STR = String;
+type VECTOR = Vec<u8>;
+type VECTOR2 = Vec<u16>;
+type VECTOR4 = Vec<u32>;
+type VECTOR8 = Vec<u64>;
+type VECTOR16 = Vec<u128>;
+type VECTOR32 = Vec<u32>;
+type VECTOR64 = Vec<u64>;
+type VECTOR128 = Vec<u128>;
+type ARRAY = [u8; 16];
+type ARRAY2 = [u16; 8];
+type ARRAY4 = [u32; 4];
+type ARRAY8 = [u64; 2];
+type ARRAY16 = [u128; 1];
+type ARRAY32 = [u32; 2];
+type ARRAY64 = [u64; 4];
+type ARRAY128 = [u128; 2];
+type ARRAY256 = [u128; 4];
+type ARRAY512 = [u128; 8];
+type SET = HashSet<u8>;
+type SET2 = HashSet<u16>;
+type SET4 = HashSet<u32>;
+type SET8 = HashSet<u64>;
+type SET16 = HashSet<u128>;
+type SET32 = HashSet<u32>;
+type SET64 = HashSet<u64>;
+type SET128 = HashSet<u128>;
+type SET256 = HashSet<u128>;
+type SET512 = HashSet<u128>;
+type TUPLE = (u8, u16, u32, u64, u128);
+type TUPLE2 = (u16, u32, u64, u128);
+type TUPLE4 = (u32, u64, u128);
+type TUPLE8 = (u64, u128);
+type TUPLE16 = (u128,);
+type TUPLE32 = (u32, u64, u128);
+type TUPLE64 = (u64, u128);
+type TUPLE128 = (u128, u128);
+type TUPLE256 = (u128, u128, u128);
+type TUPLE512 = (u128, u128, u128, u128);
+type HWADDR = [u8; 6];
+type MEMADDR = [u8; 16];
+type PCIEADDR = [u8; 16];
+type VADDR = [u8; 16]; // Virtual address
+type PADDR = [u8; 16]; // Physical address
+type ADDR128 = u128;
+type ADDR256 = u128;
+type ADDR512 = u128;
+type ADDR1024 = u128;
+type ADDR2048 = u128;
+type ADDR4096 = u128;
+type ADDR8192 = u128;
+type ENUM = u32;
+type BIT = u8;
+type BIT2 = u8;
 type NIBBLE = u8;
 type BYTEARRAY = [u8; 16];
 type WORDARRAY = [u16; 8];
@@ -209,12 +270,12 @@ static LOCALHOST_PORT: PORT = 80; // default is 80
 
 trait Peripheral
 {
-    fn doIO(&mut self, addr: Addr64, val: u16) -> u16;
-    fn doHighIO(&mut self, addr: Addr64, val: u16) -> u16;
+    fn doIO(&mut self, addr: ADDR64, val: u16) -> u16;
+    fn doHighIO(&mut self, addr: ADDR64, val: u16) -> u16;
 }
 
 struct RIG {
-    mem: [Addr64; 0xF000000000000000],
+    mem: [ADDR64; 0xF000000000000000],
     debugflags: INT,
     slots: [Option<Box<dyn Peripheral>>; 16],
     nreads: u16, // counts # of reads for noise() fn
@@ -223,12 +284,13 @@ struct RIG {
 // Bytecode
 
 type Interrrupt = u16;
-
-
+type Buffer = u16;
+type Poly = u16;
+type DMI = u8;
 
 // GL stuff
 
-type PtrDiff_t = i32;
+type PtrDiffT = i32;
 type Enum = DWORD;
 type Boolean = UCHAR;
 
@@ -264,6 +326,15 @@ static QUAD_STRIP: Enum = 0x0008;
 static POLYGON: Enum = 0x0009;
 static FRONT: Enum = 0x0404;
 static BACK: Enum = 0x0405;
+static LEFT: Enum = 0x0406;
+static RIGHT: Enum = 0x0407;
+static CCW: Enum = 0x0901;
+static CW: Enum = 0x0900;
+static LINE_WIDTH: Enum = 0x0B21;
+static CULL_FACE_MODE: Enum = 0x0B45;
+static CULL_FACE_MODE_FRONT: Enum = 0x0B46;
+static CULL_FACE_MODE_BACK: Enum = 0x0B47;
+static CULL_FACE_MODE_FRONT_AND_BACK: Enum = 0x0B48;
 static FRONT_AND_BACK: Enum = 0x0408;
 static CULL_FACE: Enum = 0x0B44;
 static BLEND: Enum = 0x0BE2;
@@ -274,6 +345,14 @@ static ZERO: f64 = 0.0;
 static ONE: f64 = 1.0;
 static SRC_COLOR: Enum = 0x0300;
 static BMP: Enum = 0x1A00;
+static BMP_RGB: Enum = 0x1A00;
+static BMP_RGBA: Enum = 0x1A01;
+static BMP_INDEXED: Enum = 0x1A02;
+static BMP_RGB_ALPHA: Enum = 0x1A03;
+static BMP_RGBA_ALPHA: Enum = 0x1A04;
+static BMP_LUMINANCE: Enum = 0x1A06;
+static BMP_LUMINANCE_ALPHA: Enum = 0x1A07;
+static BMP_ALPHA: Enum = 0x1A08;
 
 // Zero all int and float types
 
@@ -312,37 +391,58 @@ const UTF8_0: char = '\u{0}';
 const UTF8_10000: char = '\u{10000}';
 const UTF8_10FFFF: char = '\u{10FFFF}';
 
-// MAX and MIN of all types
+// Maximum value of every tpe defiend in Types
 
-const INT_I8_MAX: i8 = i8::MAX;
-const INT_I16_MAX: i16 = i16::MAX;
-const INT_I32_MAX: i32 = i32::MAX;
-const INT_I64_MAX: i64 = i64::MAX;
-const INT_I128_MAX: i128 = i128::MAX;
-const INT_U8_MAX: u8 = u8::MAX;
-const INT_U16_MAX: u16 = u16::MAX;
-const INT_U32_MAX: u32 = u32::MAX;
-const INT_U64_MAX: u64 = u64::MAX;
-const INT_U128_MAX: u128 = u128::MAX;
-const FLOAT_F32_MAX: f32 = f32::MAX;
-const FLOAT_F64_MAX: f64 = f64::MAX;
-const ISIZE_ISIZE_MAX: isize = isize::MAX;
-const USIZE_USIZE_MAX: usize = usize::MAX;
+const BYTE_MAX: BYTE = 0xFF;
+const WORD_MAX: WORD = 0xFFFF;
+const DWORD_MAX: DWORD = 0xFFFFFFFF;
+const QWORD_MAX: QWORD = 0xFFFFFFFFFFFFFFFF;
+const DOUBLE_MAX: DOUBLE = DOUBLE::MAX;
+const FLOAT_MAX: FLOAT = FLOAT::MAX;
+const BOOL_MAX: BOOL = true;
+const CHAR_MAX: CHAR = CHAR::MAX;
+const SHORT_MAX: SHORT = SHORT::MAX;
+const INT_MAX: INT = INT::MAX;
+const LONG_MAX: LONG = LONG::MAX;
+const UCHAR_MAX: UCHAR = UCHAR::MAX;
+const USHORT_MAX: USHORT = USHORT::MAX;
+const UINT_MAX: UINT = UINT::MAX;
+const ULONG_MAX: ULONG = ULONG::MAX;
+const SCHAR_MAX: SCHAR = SCHAR::MAX;
+const ProgramCall_MAX: ProgramCall = ProgramCall::MAX;
+const ADDR8_MAX: ADDR8 = ADDR8::MAX;
+const ADDR16_MAX: ADDR16 = ADDR16::MAX;
+const ADDR32_MAX: ADDR32 = ADDR32::MAX;
+const ADDR64_MAX: ADDR64 = ADDR64::MAX;
+const NIBBLE_MAX: NIBBLE = NIBBLE::MAX;
 
-const INT_I8_MIN: i8 = i8::MIN;
-const INT_I16_MIN: i16 = i16::MIN;
-const INT_I32_MIN: i32 = i32::MIN;
-const INT_I64_MIN: i64 = i64::MIN;
-const INT_I128_MIN: i128 = i128::MIN;
-const INT_U8_MIN: u8 = u8::MIN;
-const INT_U16_MIN: u16 = u16::MIN;
-const INT_U32_MIN: u32 = u32::MIN;
-const INT_U64_MIN: u64 = u64::MIN;
-const INT_U128_MIN: u128 = u128::MIN;
-const FLOAT_F32_MIN: f32 = f32::MIN;
-const FLOAT_F64_MIN: f64 = f64::MIN;
-const ISIZE_ISIZE_MIN: isize = isize::MIN;
-const USIZE_USIZE_MIN: usize = usize::MIN;
+
+// Minimum value of every tpe defiend in Types
+const BYTE_MIN: BYTE = 0x00;
+const WORD_MIN: WORD = 0x0000;
+const DWORD_MIN: DWORD = 0x00000000;
+const QWORD_MIN: QWORD = 0x0000000000000000;
+const DOUBLE_MIN: DOUBLE = DOUBLE::MIN;
+const FLOAT_MIN: FLOAT = FLOAT::MIN;
+const BOOL_MIN: BOOL = false;
+const CHAR_MIN: CHAR = CHAR::MIN;
+const SHORT_MIN: SHORT = SHORT::MIN;
+const INT_MIN: INT = INT::MIN;
+const LONG_MIN: LONG = LONG::MIN;
+const UCHAR_MIN: UCHAR = UCHAR::MIN;
+const USHORT_MIN: USHORT = USHORT::MIN;
+const UINT_MIN: UINT = UINT::MIN;
+const ULONG_MIN: ULONG = ULONG::MIN;
+const SCHAR_MIN: SCHAR = SCHAR::MIN;
+const ProgramCall_MIN: ProgramCall = ProgramCall::MIN;
+const ADDR8_MIN: ADDR8 = ADDR8::MIN;
+const ADDR16_MIN: ADDR16 = ADDR16::MIN;
+const ADDR32_MIN: ADDR32 = ADDR32::MIN;
+const ADDR64_MIN: ADDR64 = ADDR64::MIN;
+const NIBBLE_MIN: NIBBLE = NIBBLE::MIN;
+
+
+// Definitions Function
 
 fn defs() {
     let mut idx: i32 = 0;
@@ -374,7 +474,7 @@ fn defs() {
 }
 
 
-// Types
+// General Types
 
 type Pointer = *mut u8;
 type Size = usize;
@@ -487,7 +587,7 @@ pub (crate) struct Warning {
 struct Object {
     name: String,
     data: String,
-    loc: Addr16,
+    loc: ADDR16,
     size: Size,
     type_: Enum,
     parent: Option<Box<Object>>,
@@ -512,6 +612,19 @@ struct Scene {
 struct Polygon {
     points: Vec<(f64, f64)>,
 }
+
+
+
+struct Vertex {
+    pos: Vec2,
+    tex: Vec2,
+    col: Vec3,
+    norm: Vec3,
+}
+
+struct VecOp{} // for creating any vec, mat or arr (takes no arguments)
+
+
 
 
 // Implementation block
@@ -820,7 +933,7 @@ type UserWarning = Warning;
 // More stuff
 
 impl Object {
-    fn new(name: String, data: String, loc: Addr16, size: Size, type_: Enum, parent: Option<Box<Object>>, children: Vec<Box<Object>>, next: Option<Box<Object>>, prev: Option<Box<Object>>, first: Option<Box<Object>>, last: Option<Box<Object>>, flags: Enum) -> Object {
+    fn new(name: String, data: String, loc: ADDR16, size: Size, type_: Enum, parent: Option<Box<Object>>, children: Vec<Box<Object>>, next: Option<Box<Object>>, prev: Option<Box<Object>>, first: Option<Box<Object>>, last: Option<Box<Object>>, flags: Enum) -> Object {
         Object { name: name, data: data, loc: loc, size: size, type_: type_, parent: parent, children: children, next: next, prev: prev, first: first, last: last, flags: flags }
     }
     fn repr(&self) {
@@ -858,5 +971,47 @@ impl Polygon {
     }
 }
 
+impl Vertex {
+    fn new(pos: Vec2, tex: Vec2, col: Vec3, norm: Vec3) -> Vertex {
+        Vertex { pos: pos, tex: tex, col: col, norm: norm }
+    }
+    fn transform(&self, mat: &Mat4) -> () {
+        let Vertex { pos, tex, col, norm } = *self;
+        let Mat4 { m } = *mat;
+    }
+    fn transform_mut(&mut self, mat: &Mat4) -> () {
+        let Vertex { pos, tex, col, norm } = *self;
+    }
+}
+
 // Extra classes and stuff
+
+impl VecOp {
+    fn new() -> VecOp {
+        VecOp {}
+    }
+    fn create(&self, typ: String) {
+        if typ == "Vec1" {
+            Vec1::new(0.0);
+        }
+        if typ == "Vec2" {
+            Vec2::new(0.0, 0.0);
+        }
+        if typ == "Vec3" {
+            Vec3::new(0.0, 0.0, 0.0);
+        }
+        if typ == "Vec4" {
+            Vec4::new(0.0, 0.0, 0.0, 0.0);
+        }
+        if typ == "Mat2" {
+            Mat2::identity();
+        }
+        if typ == "Mat3" { 
+            Mat3::identity();
+        }
+        if typ == "Mat4" {
+            Mat4::identity();
+        }
+    }
+}
 
