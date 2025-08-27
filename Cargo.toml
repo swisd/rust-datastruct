@@ -4,3 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+rusqlite = { version = "0.32", features = ["bundled"] } # Use the latest version available
+chrono = "0.4" # Or the latest version
+windows = { version = "0.56.0", features = ["Win32_System_EventLog", "Win32_System_Threading", "Win32_Security"] }

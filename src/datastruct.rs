@@ -1,7 +1,7 @@
 // datastruct
 
 use std::collections::HashSet;
-use std::ptr::addr_of_mut;
+use std::{fmt, io};
 
 const CLK: u32 = 1000000;
 const PI: f64 = std::f64::consts::PI;
@@ -579,7 +579,7 @@ pub(crate) struct Error {
     message: String,
 }
 
-pub (crate) struct Warning {
+pub(crate) struct Warning {
     code: i32,
     message: String,
 }
@@ -614,7 +614,6 @@ struct Polygon {
 }
 
 
-
 struct Vertex {
     pos: Vec2,
     tex: Vec2,
@@ -622,9 +621,7 @@ struct Vertex {
     norm: Vec3,
 }
 
-struct VecOp{} // for creating any vec, mat or arr (takes no arguments)
-
-
+struct VecOp; // for creating any vec, mat or arr (takes no arguments)
 
 
 // Implementation block
@@ -742,7 +739,9 @@ impl Vec1 {
     fn distance(&self, other: &Vec1) -> f64 {
         ((self.x - other.x) * (self.x - other.x)).sqrt()
     }
-    fn transform(&self, mat: &Mat4) -> () {}
+    fn transform(&self, mat: &Mat4) -> () { // need a transform equation
+
+    }
 }
 
 impl Vec2 {
@@ -845,7 +844,10 @@ impl Error {
         println!("Error: {} :: {}", self.code, self.message);
     }
     pub fn error(&self) {
-        println!("Error: {} :: {}", self.code, self.message);
+        println!("[Error] {} :: {}", self.code, self.message);
+    }
+    pub fn cerror(&self) {
+        println!("[Error {}] {}", self.code, self.message)
     }
 }
 
@@ -899,7 +901,6 @@ type UnicodeTranslateError = UnicodeError;
 type ZeroDivisionError = ArithmeticError;
 
 
-
 type KeyboardInterrupt = Interrrupt;
 
 
@@ -927,7 +928,6 @@ type RuntimeWarning = Warning;
 type SyntaxWarning = Warning;
 type UnicodeWarning = Warning;
 type UserWarning = Warning;
-
 
 
 // More stuff
@@ -976,13 +976,14 @@ impl Vertex {
         Vertex { pos: pos, tex: tex, col: col, norm: norm }
     }
     fn transform(&self, mat: &Mat4) -> () {
-        let Vertex { pos, tex, col, norm } = *self;
+        let Vertex { pos, tex, col, norm } = &self;
         let Mat4 { m } = *mat;
     }
     fn transform_mut(&mut self, mat: &Mat4) -> () {
-        let Vertex { pos, tex, col, norm } = *self;
+        let Vertex { pos, tex, col, norm } = &self;
     }
 }
+
 
 // Extra classes and stuff
 
@@ -1006,7 +1007,7 @@ impl VecOp {
         if typ == "Mat2" {
             Mat2::identity();
         }
-        if typ == "Mat3" { 
+        if typ == "Mat3" {
             Mat3::identity();
         }
         if typ == "Mat4" {
@@ -1014,4 +1015,50 @@ impl VecOp {
         }
     }
 }
+
+struct Serializer {
+    key: USHORT,
+    data: [BYTE; 8],
+}
+
+impl Serializer {
+    fn new(key: USHORT, data: [BYTE; 8]) -> Serializer {
+        Serializer { key: key, data }
+    }
+    fn serialize(&self) -> Vec<BYTE> {
+        self.data.to_vec()
+    }
+}
+
+trait Serialized {
+    fn serialize(&self) -> Vec<u8>;
+}
+
+
+struct Visitor<'s> {
+    serializer: &'s mut dyn Serialized,
+}
+
+impl<'s> Visitor<'s> {
+    fn new(serializer: &'s mut dyn Serialized) -> Self {
+        Self { serializer }
+    }
+}
+
+// Macros
+
+/*
+macro_rules! prnt { // print statement equivalent
+    ($($arg:tt)*) => {
+        {
+            use std::io::Write;
+            print!($($arg)*);
+            std::io::stdout().flush().unwrap();
+        }
+    }
+}
+*/
+
+//prnt!("hello");
+
 
