@@ -77,6 +77,9 @@ impl u12 {
     pub fn from_bytes(a: u8, b: u8) -> u32 {
         ((a as u32) << 8) | (b as u32)
     }
+    pub fn to_bytes(&self) -> (u8, u8) {
+        self.get_bytes()
+    }
 }
 
 impl i12 {
@@ -85,6 +88,9 @@ impl i12 {
     }
     pub fn from_bytes(a: i8, b: i8) -> i32 {
         ((a as i32) << 8) | (b as i32)
+    }
+    pub fn to_bytes(&self) -> (i8, i8) {
+        self.get_bytes()
     }
 }
 
@@ -95,6 +101,9 @@ impl u24 {
     pub fn from_bytes(a: u8, b: u8, c: u8) -> u32 {
         ((a as u32) << 16) | ((b as u32) << 8) | (c as u32)
     }
+    pub fn to_bytes(&self) -> (u8, u8, u8) {
+        self.get_bytes()
+    }
 }
 
 impl i24 {
@@ -103,6 +112,9 @@ impl i24 {
     }
     pub fn from_bytes(a: i8, b: i8, c: i8) -> i32 {
         ((a as i32) << 16) | ((b as i32) << 8) | (c as i32)
+    }
+    pub fn to_bytes(&self) -> (i8, i8, i8) {
+        self.get_bytes()
     }
 }
 
@@ -113,6 +125,9 @@ impl u48 {
     pub fn from_bytes(a: u16, b: u16) -> u64 {
         ((a as u64) << 16) | (b as u64)
     }
+    pub fn to_bytes(&self) -> (u16, u16) {
+        self.get_bytes()
+    }
 }
 
 impl i48 {
@@ -121,6 +136,9 @@ impl i48 {
     }
     pub fn from_bytes(a: i16, b: i16) -> i64 {
         ((a as i64) << 16) | (b as i64)
+    }
+    pub fn to_bytes(&self) -> (i16, i16) {
+        self.get_bytes()
     }
 }
 
@@ -131,6 +149,9 @@ impl u72 {
     pub fn from_bytes(a: u32, b: u32) -> u128 {
         ((a as u128) << 32) | (b as u128)
     }
+    pub fn to_bytes(&self) -> (u32, u32) {
+        self.get_bytes()
+    }
 }
 
 impl i72 {
@@ -139,6 +160,9 @@ impl i72 {
     }
     pub fn from_bytes(a: i32, b: i32) -> i128 {
         ((a as i128) << 32) | (b as i128)
+    }
+    pub fn to_bytes(&self) -> (i32, i32) {
+        self.get_bytes()
     }
 }
 
@@ -149,6 +173,9 @@ impl u96 {
     pub fn from_bytes(a: u64, b: u64) -> u192 {
         ((a as u192) << 64) | (b as u192)
     }
+    pub fn to_bytes(&self) -> (u64, u64) {
+        self.get_bytes()
+    }
 }
 
 impl i96 {
@@ -157,6 +184,9 @@ impl i96 {
     }
     pub fn from_bytes(a: i64, b: i64) -> i192 {
         ((a as i192) << 64) | (b as i192)
+    }
+    pub fn to_bytes(&self) -> (i64, i64) {
+        self.get_bytes()
     }
 }
 
@@ -167,6 +197,9 @@ impl u192 {
     pub fn from_bytes(a: u128, b: u128) -> u192 {
         ((a as u192) << 128) | (b as u192)
     }
+    pub fn to_bytes(&self) -> (u128, u128) {
+        self.get_bytes()
+    }
 }
 
 impl i192 {
@@ -175,5 +208,8 @@ impl i192 {
     }
     pub fn from_bytes(a: i128, b: i128) -> i192 {
         ((a as i192) << 128) | (b as i192)
+    }
+    pub fn to_bytes(&self) -> (i128, i128) {
+        self.get_bytes()
     }
 }
