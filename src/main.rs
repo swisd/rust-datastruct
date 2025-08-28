@@ -1,8 +1,10 @@
 use std::error::Error;
+use crate::ctypes::i24;
+
 pub mod datastruct;
 pub mod splog;
 pub mod evlog;
-mod ctypes;
+pub mod ctypes;
 
 fn main() -> Result<(), Box<dyn Error>> {
     println!("Hello, world!");
@@ -12,5 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let connection = splog::connect_db("records.db");
     splog::ledger(connection.unwrap(), 1500, 2500, "system", "/", splog::LedgerType::W, "system might be unstable due to incompatibilities")?;
     // evlog::evlog_main();
+    let a = i24::from_bytes(5,5,5);
+    println!("{:?}", a);
     Ok(())
 }
