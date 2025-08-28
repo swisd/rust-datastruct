@@ -2,6 +2,7 @@ use std::error::Error;
 pub mod datastruct;
 pub mod splog;
 pub mod evlog;
+mod ctypes;
 
 fn main() -> Result<(), Box<dyn Error>> {
     println!("Hello, world!");
